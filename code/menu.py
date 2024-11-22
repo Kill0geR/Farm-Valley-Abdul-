@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from timer import Timer
+import json
 
 
 class Menu:
@@ -25,6 +26,14 @@ class Menu:
 		# movement
 		self.index = 0
 		self.timer = Timer(200)
+
+	@staticmethod
+	def new_data(new_data_stream, filename=''):
+		with open(filename, 'r+') as file:
+			file_data = json.load(file)
+			file_data["data"][0] = new_data_stream
+			file.seek(0)
+			json.dump(file_data, file, indent=4)
 
 	def display_money(self):
 		text_surf = self.font.render(f'${self.player.money}', False, 'Black')
@@ -78,6 +87,8 @@ class Menu:
 					if self.player.item_inventory[current_item] > 0:
 						self.player.item_inventory[current_item] -= 1
 						self.player.money += SALE_PRICES[current_item]
+						self.new_data(self.player.item_inventory, filename="../Inventory_Json/inventory.json")
+						self.new_data({"money": self.player.money}, filename="../Inventory_Json/money.json")
 
 				# buy
 				else:
@@ -85,6 +96,7 @@ class Menu:
 					if self.player.money >= seed_price:
 						self.player.seed_inventory[current_item] += 1
 						self.player.money -= PURCHASE_PRICES[current_item]
+						self.new_data(self.player.seed_inventory, filename="../Inventory_Json/seed_inventory.json")
 
 		# clamo the values
 		if self.index < 0:

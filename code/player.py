@@ -1,3 +1,5 @@
+import json
+
 import pygame
 from settings import *
 from support import *
@@ -7,6 +9,15 @@ from timer import Timer
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
         super().__init__(group)
+
+        with open("../Inventory_Json/inventory.json", "r") as f:
+            self.item_inventory = json.load(f)["data"][0]
+
+        with open("../Inventory_Json/seed_inventory.json", "r") as f:
+            self.seed_inventory = json.load(f)["data"][0]
+
+        with open("../Inventory_Json/money.json", "r") as f:
+            self.money = json.load(f)["data"][0]["money"]
 
         self.import_assets()
         self.status = 'down_idle'
@@ -43,19 +54,6 @@ class Player(pygame.sprite.Sprite):
         self.seeds = ['corn', 'tomato']
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
-
-        # inventory
-        self.item_inventory = {
-            'wood': 20,
-            'apple': 20,
-            'corn': 20,
-            'tomato': 20
-        }
-        self.seed_inventory = {
-            'corn': 5,
-            'tomato': 5
-        }
-        self.money = 200
 
         # interaction
         self.tree_sprites = tree_sprites

@@ -111,10 +111,10 @@ class Level:
 	def player_add(self,item):
 
 		self.player.item_inventory[item] += 1
+		Menu.new_data(self.player.item_inventory, filename="../Inventory_Json/inventory.json")
 		self.success.play()
 
 	def toggle_shop(self):
-
 		self.shop_active = not self.shop_active
 
 	def reset(self):
