@@ -14,7 +14,7 @@ class Game:
         self.level = Level()
 
     def run(self):
-        cursor_image = pygame.image.load("../../Cursors/Cursors/leaf.png").convert_alpha()
+        cursor_image = pygame.image.load("../Cursors/Cursors/leaf.png").convert_alpha()
         cursor_image = pygame.transform.scale(cursor_image, (32, 32))
 
         pygame.mouse.set_visible(False)
