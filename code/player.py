@@ -11,13 +11,13 @@ class Player(pygame.sprite.Sprite):
         super().__init__(group)
 
         with open("../Inventory_Json/inventory.json", "r") as f:
-            self.item_inventory = json.load(f)["data"][0]
+            self.item_inventory = json.load(f)
 
         with open("../Inventory_Json/seed_inventory.json", "r") as f:
-            self.seed_inventory = json.load(f)["data"][0]
+            self.seed_inventory = json.load(f)
 
         with open("../Inventory_Json/money.json", "r") as f:
-            self.money = json.load(f)["data"][0]["money"]
+            self.money = json.load(f)["money"]
 
         self.import_assets()
         self.status = 'down_idle'

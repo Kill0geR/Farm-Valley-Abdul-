@@ -31,7 +31,7 @@ class Menu:
     def new_data(new_data_stream, filename=''):
         with open(filename, 'r+') as file:
             file_data = json.load(file)
-            file_data["data"][0] = new_data_stream
+            file_data.update(new_data_stream)
             file.seek(0)
             json.dump(file_data, file, indent=4)
 
@@ -87,16 +87,54 @@ class Menu:
                     if self.player.item_inventory[current_item] > 0:
                         self.player.item_inventory[current_item] -= 1
                         self.player.money += SALE_PRICES[current_item]
-                        self.new_data(self.player.item_inventory, filename="../Inventory_Json/inventory.json")
-                        self.new_data({"money": self.player.money}, filename="../Inventory_Json/money.json")
+                        try:
+                            self.new_data(self.player.item_inventory, filename="../Inventory_Json/inventory.json")
+                            self.new_data({"money": self.player.money}, filename="../Inventory_Json/money.json")
 
+                        except Exception as e:
+                            print(e)
+
+                            with open('../Inventory_Json/money.json', 'w') as file:
+                                file.truncate(0)
+
+                            with open('../Inventory_Json/money.json', 'a+') as file:
+                                file_data = {"money": self.player.money}
+                                file.seek(0)
+                                json.dump(file_data, file, indent=4)
+
+                            with open('../Inventory_Json/inventory.json', 'w') as file:
+                                file.truncate(0)
+
+                            with open('../Inventory_Json/inventory.json', 'a+') as file:
+                                file_data = self.player.item_inventory
+                                file.seek(0)
+                                json.dump(file_data, file, indent=4)
                 # buy
                 else:
                     seed_price = PURCHASE_PRICES[current_item]
                     if self.player.money >= seed_price:
                         self.player.seed_inventory[current_item] += 1
                         self.player.money -= PURCHASE_PRICES[current_item]
-                        self.new_data(self.player.seed_inventory, filename="../Inventory_Json/seed_inventory.json")
+                        try:
+                            self.new_data(self.player.seed_inventory, filename="../Inventory_Json/seed_inventory.json")
+                            self.new_data({"money": self.player.money}, filename="../Inventory_Json/money.json")
+
+                        except Exception as e:
+                            with open('../Inventory_Json/money.json', 'w') as file:
+                                file.truncate(0)
+
+                            with open('../Inventory_Json/money.json', 'a+') as file:
+                                file_data = {"money": self.player.money}
+                                file.seek(0)
+                                json.dump(file_data, file, indent=4)
+
+                            with open('../Inventory_Json/seed_inventory.json', 'w') as file:
+                                file.truncate(0)
+
+                            with open('../Inventory_Json/seed_inventory.json', 'a+') as file:
+                                file_data = self.player.seed_inventory
+                                file.seek(0)
+                                json.dump(file_data, file, indent=4)
 
         # clamo the values
         if self.index < 0:
